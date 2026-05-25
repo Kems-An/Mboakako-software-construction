@@ -1,0 +1,22 @@
+# devops/grafana/provisioning/datasources/prometheus.yml
+# ─────────────────────────────────────────────────────────────────────────────
+# Grafana Datasource Provisioning
+#
+# This file tells Grafana to automatically configure Prometheus as a
+# data source when the container starts — no manual setup required.
+# ─────────────────────────────────────────────────────────────────────────────
+
+apiVersion: 1
+
+datasources:
+  - name:      Prometheus
+    type:      prometheus
+    access:    proxy             # Grafana server proxies requests (not browser)
+    url:       http://prometheus:9090   # Docker Compose service name + port
+    isDefault: true
+    editable:  true
+    jsonData:
+      httpMethod:          POST
+      timeInterval:        "15s"   # match Prometheus scrape_interval
+      queryTimeout:        "60s"
+      manageAlerts:        true

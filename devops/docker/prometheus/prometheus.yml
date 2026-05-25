@@ -1,0 +1,70 @@
+# devops/prometheus/prometheus.yml
+# ─────────────────────────────────────────────────────────────────────────────
+# Prometheus scrape configuration for the Mboakako project.
+#
+# Prometheus collects metrics by "scraping" HTTP endpoints at regular intervals.
+# Each job below defines a target (service + port) and how often to scrape it.
+#
+# Metrics monitored:
+#   - Nginx performance: request rate, error rate, active connections
+#   - Container/host health: CPU, memory, disk (via node-exporter if added)
+#   - Prometheus itself: self-monitoring
+# ─────────────────────────────────────────────────────────────────────────────
+
+global:
+  # How often to scrape each target by default
+  scrape_interval: 15s
+
+  # How long before a scrape is considered timed out
+  scrape_timeout: 10s
+
+  # How often to evaluate alerting rules
+  evaluation_interval: 15s
+
+  # Labels added to all time-series collected by this Prometheus instance
+  external_labels:
+    environment: "production"
+    project:     "mboakako"
+
+# ── Alerting rules (files to load) ───────────────────────────
+rule_files:
+  - "alerts/*.yml"
+
+# ── Scrape jobs ───────────────────────────────────────────────
+scrape_configs:
+
+  # Self-monitoring — Prometheus scrapes its own /metrics endpoint
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+    metrics_path: /metrics
+    scheme: http
+
+  # Nginx stub_status — exposes basic Nginx metrics:
+  #   nginx_connections_active, nginx_requests_total, etc.
+  # Requires the nginx-prometheus-exporter sidecar OR Nginx stub_status module.
+  # The frontend Nginx image exposes /nginx_status on port 8080 via exporter.
+  - job_name: "nginx"
+    static_configs:
+      # mboakako_frontend is the Docker Compose service name
+      - targets: ["frontend:9113"]
+        labels:
+          service: "frontend"
+          instance: "mboakako_frontend"
+    scrape_interval: 30s
+
+  # Node Exporter — host-level metrics: CPU, memory, disk, network.
+  # Uncomment and add node-exporter to docker-compose.yml to enable.
+  # - job_name: "node"
+  #   static_configs:
+  #     - targets: ["node_exporter:9100"]
+  #   scrape_interval: 30s
+
+  # Grafana self-monitoring
+  - job_name: "grafana"
+    static_configs:
+      - targets: ["grafana:3000"]
+        labels:
+          service: "grafana"
+    metrics_path: /metrics
+    scrape_interval: 60s

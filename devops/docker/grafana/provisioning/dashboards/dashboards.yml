@@ -1,0 +1,21 @@
+# devops/grafana/provisioning/dashboards/dashboards.yml
+# ─────────────────────────────────────────────────────────────────────────────
+# Grafana Dashboard Provisioning
+#
+# Tells Grafana where to find pre-built dashboard JSON files on startup.
+# Dashboards in /var/lib/grafana/dashboards are loaded automatically.
+# ─────────────────────────────────────────────────────────────────────────────
+
+apiVersion: 1
+
+providers:
+  - name:            "Mboakako Dashboards"
+    orgId:           1
+    folder:          "Mboakako"       # folder name inside Grafana UI
+    type:            file
+    disableDeletion: false
+    updateIntervalSeconds: 30         # re-check for file changes every 30s
+    allowUiUpdates:  true             # allow editing in the UI
+    options:
+      path: /var/lib/grafana/dashboards
+      foldersFromFilesStructure: true

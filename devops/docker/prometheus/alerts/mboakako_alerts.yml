@@ -1,0 +1,61 @@
+# devops/prometheus/alerts/mboakako_alerts.yml
+# ─────────────────────────────────────────────────────────────────────────────
+# Alerting rules for the Mboakako platform.
+# Prometheus evaluates these rules every `evaluation_interval` seconds.
+# Alerts can be routed to Alertmanager → Slack, email, PagerDuty, etc.
+# ─────────────────────────────────────────────────────────────────────────────
+
+groups:
+
+  - name: mboakako_frontend
+    rules:
+
+      # Alert if the frontend container stops responding
+      - alert: FrontendDown
+        expr: up{job="nginx"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service:  frontend
+        annotations:
+          summary:     "Mboakako frontend is down"
+          description: "The Nginx/frontend container has not been reachable for more than 1 minute."
+
+      # Alert if Nginx error rate exceeds 5% of total requests
+      - alert: HighErrorRate
+        expr: |
+          rate(nginx_http_requests_total{status=~"5.."}[5m])
+          /
+          rate(nginx_http_requests_total[5m]) > 0.05
+        for: 2m
+        labels:
+          severity: warning
+          service:  frontend
+        annotations:
+          summary:     "High HTTP 5xx error rate on frontend"
+          description: "More than 5% of requests are returning 5xx errors."
+
+  - name: mboakako_infrastructure
+    rules:
+
+      # Alert if Prometheus itself goes down (self-monitor)
+      - alert: PrometheusDown
+        expr: up{job="prometheus"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service:  prometheus
+        annotations:
+          summary:     "Prometheus is down"
+          description: "Prometheus monitoring has stopped. No metrics are being collected."
+
+      # Alert if Grafana stops responding
+      - alert: GrafanaDown
+        expr: up{job="grafana"} == 0
+        for: 2m
+        labels:
+          severity: warning
+          service:  grafana
+        annotations:
+          summary:     "Grafana dashboard is unavailable"
+          description: "Grafana has not been reachable for more than 2 minutes."
