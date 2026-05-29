@@ -23,11 +23,14 @@ const Home: React.FC = () => {
   const { recommendations, loading: recLoading } = useRecommendations(user?.id);
   const { products: newArrivals, loading: arrivalsLoading } = useProducts();
 
-  const displayProducts = user && recommendations.length > 0
-    ? recommendations
+  // Always show new arrivals while recommendations load
+  // Never block product display on auth state
+  const displayProducts = (user && recommendations.length > 0)
+    ? recommendations.slice(0, 8)
     : newArrivals.slice(0, 8);
 
-  const isLoading = user ? recLoading : arrivalsLoading;
+  // Only block on arrivals loading, not recommendations
+  const isLoading = arrivalsLoading;
 
   return (
     <main className="min-h-screen bg-gray-50">
