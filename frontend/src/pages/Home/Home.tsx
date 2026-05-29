@@ -20,7 +20,7 @@ const CATEGORIES = ['Shoes', 'Bags', 'Jewelries', 'Gadget', 'Topwear', 'Afro'];
 
 const Home: React.FC = () => {
   const { user, profile } = useAuth();
-  const { recommendations, loading: recLoading } = useRecommendations(user?.id);
+  const { recommendations } = useRecommendations(user?.id);
   const { products: newArrivals, loading: arrivalsLoading } = useProducts();
 
   // Always show new arrivals while recommendations load
