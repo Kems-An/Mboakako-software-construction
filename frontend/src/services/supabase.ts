@@ -6,18 +6,15 @@ const supabaseUrl     = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error(
-    'Missing Supabase environment variables. ' +
-    'Check VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your .env.local file.'
-  );
+  throw new Error('Missing Supabase environment variables.');
 }
 
 export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession:     true,
     autoRefreshToken:   true,
-    detectSessionInUrl: true,
-    storageKey:         'mboakako-auth-token',
-    storage:            localStorage,
+    detectSessionInUrl: false,
+    storageKey:         'mboakako-auth',
+    storage:            window.localStorage,
   },
 });

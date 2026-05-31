@@ -26,7 +26,7 @@ const Login: React.FC = () => {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Link to="/" className="text-3xl font-black text-amber-500">mboakako</Link>
+          <Link to="/" className="text-3xl font-black text-amber-500">mboastore</Link>
           <h1 className="mt-4 text-2xl font-bold text-gray-900">Welcome back</h1>
           <p className="text-sm text-gray-500 mt-1">Sign in to your account</p>
         </div>

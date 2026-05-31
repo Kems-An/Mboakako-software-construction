@@ -40,7 +40,7 @@ const Signup: React.FC = () => {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Link to="/" className="text-3xl font-black text-amber-500">mboakako</Link>
+          <Link to="/" className="text-3xl font-black text-amber-500">mboastore</Link>
           <h1 className="mt-4 text-2xl font-bold text-gray-900">Create an account</h1>
           <p className="text-sm text-gray-500 mt-1">Start shopping in seconds</p>
         </div>
