@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { getUserOrders } from '../../services/orders';
 import { supabase } from '../../services/supabase';
-import type { Order } from '../../types/database';
+import type { Order } from '../../services/orders';
 import { formatPrice, formatDate, getStatusColor } from '../../utils/helpers';
 import { Spinner, Badge } from '../../components/ui/index';
 import { 
